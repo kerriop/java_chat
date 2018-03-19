@@ -6,17 +6,29 @@ import java.io.Serializable;
  * Абстракция сообщения между клиентом и сервером
  */
 public class Message implements Serializable {
-	public static final int CLIENT_SERVER_PING = -1;
-	
-	//Сообщение сервера клиенту о присоединении пользователя
+	/**
+	 * Сообщение сервера клиенту о присоединении пользователя
+	 */
     public static final int SERVER_CLIENT_ADD_USER = 0;
-    //Сообщение клиенту о удалении пользователя из чата
+    
+	/**
+	 * Сообщение клиенту о удалении пользователя из чата
+	 */
     public static final int SERVER_CLIENT_REMOVE_UESR = 1;
-    //Сообщение клиента серверу о логине клиента
+    
+	/**
+	 * Сообщение клиента серверу о логине клиента
+	 */
     public static final int CLIENT_SERVER_LOGIN = 2;
-    //Пересылка чистого сообщения от клиента к серверу
+    
+	/**
+	 * Пересылка чистого сообщения от клиента к серверу
+	 */
     public static final int CLIENT_SERVER_MESSAGE = 3;
-    //Пересылка чистого сообщения от сервера всем остальным клиентам
+    
+	/**
+	 * Пересылка чистого сообщения от сервера всем остальным клиентам
+	 */
     public static final int SERVER_CLIENT_MESSAGE = 4;
     
     private final int type;
