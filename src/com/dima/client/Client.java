@@ -8,6 +8,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Клиентский обработчик сети
+ */
 public class Client implements Runnable {
 	private String login;
 	private Socket socket;
@@ -19,9 +22,14 @@ public class Client implements Runnable {
 		this.socket = socket;
 		this.login = login;
 		this.output = new ObjectOutputStream(socket.getOutputStream());
+		this.output.flush();
 		this.input = new ObjectInputStream(socket.getInputStream());
 	}
 	
+	/**
+	 * Установить привязанное окно чата
+	 * @param window окно чата
+	 */
 	public void setWindow(ClientWindow window) {
 		this.window = window;
 	}
@@ -34,6 +42,7 @@ public class Client implements Runnable {
 		Message message = new Message(Message.CLIENT_SERVER_MESSAGE, text);
 		try {
 			output.writeObject(message);
+			output.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,6 +54,7 @@ public class Client implements Runnable {
 			//Посылаем свой логин серверу
 			Message message = new Message(Message.CLIENT_SERVER_LOGIN, login);
 			output.writeObject(message);
+			output.flush();
 			
 			//Читаем сообщения сервера
 			while (true) {
@@ -68,6 +78,7 @@ public class Client implements Runnable {
 			cnfe.printStackTrace();
 		} catch (IOException ioe) {
 			tryClose();
+			ioe.printStackTrace();
 		}
 	}
 	

@@ -41,19 +41,40 @@ public class Server implements Runnable {
             System.out.println("Клиент подключился");
         }
     }
-    
-    public void userConnected(String login) {
+	
+	/**
+	 * Обработка присоединения клиента
+	 * @param source источник события
+	 * @param login его логин
+	 */
+	public void userConnected(ClientHandler source, String login) {
 	    Message message = new Message(Message.SERVER_CLIENT_ADD_USER, login);
-	    for (ClientHandler client : clients)
-	    	client.sendCustomMessage(message);
+	    for (ClientHandler client : clients) {
+		    if (client != source)
+	    	    client.sendCustomMessage(message);
+	    }
+	    
+	    for (ClientHandler client : clients) {
+	    	if (client != source)
+	    		source.sendCustomMessage(new Message(Message.SERVER_CLIENT_ADD_USER, client.getLogin()));
+	    }
     }
 	
+	/**
+	 * Обработка отсоединения клиента
+	 * @param login его логин
+	 */
 	public void userDisconnected(String login) {
 		Message message = new Message(Message.SERVER_CLIENT_REMOVE_UESR, login);
 		for (ClientHandler client : clients)
 			client.sendCustomMessage(message);
 	}
-    
+	
+	/**
+	 * Отправка сообщения всем пользователям чата
+	 * @param login логин
+	 * @param text сообщение
+	 */
     public void sendMessageToAll(String login, String text) {
     	String content = String.format(
     			"[%s] %s",

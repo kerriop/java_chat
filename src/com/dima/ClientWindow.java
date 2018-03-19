@@ -28,7 +28,7 @@ public class ClientWindow extends JDialog {
         });
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         users.setModel(usersModel);
     }
@@ -36,17 +36,28 @@ public class ClientWindow extends JDialog {
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
-    
-    public void addMessage(String content) {
-        history.append(content + "\n");
+	
+	/**
+	 * Добавить сообщение в историю чата
+	 * @param message сообщение
+	 */
+	public void addMessage(String message) {
+        history.append(message + "\n");
     }
-    
-    public void addUser(String content) {
-    	usersModel.addElement(content);
+	
+	/**
+	 * Добавить пользователя в список пользователей
+	 * @param login логин пользователя
+	 */
+	public void addUser(String login) {
+    	usersModel.addElement(login);
     }
-    
-    public void removeUser(String content) {
-    	//TODO: проверить сравнимость String
-        usersModel.removeElement(content);
+	
+	/**
+	 * Удалить пользователя из списка пользователей
+	 * @param login логин пользователя
+	 */
+	public void removeUser(String login) {
+        usersModel.removeElement(login);
     }
 }

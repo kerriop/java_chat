@@ -1,12 +1,13 @@
 package com.dima.message;
 
-import java.io.DataInputStream;
 import java.io.Serializable;
 
 /**
  * Абстракция сообщения между клиентом и сервером
  */
 public class Message implements Serializable {
+	public static final int CLIENT_SERVER_PING = -1;
+	
 	//Сообщение сервера клиенту о присоединении пользователя
     public static final int SERVER_CLIENT_ADD_USER = 0;
     //Сообщение клиенту о удалении пользователя из чата
@@ -47,11 +48,17 @@ public class Message implements Serializable {
 				'}';
 	}
 	
+	/**
+	 * Тип сообщения. Его числовой код. См. константы класса Message
+	 */
 	public int getType() {
         return this.type;
     }
 	
-    public String getContent() {
+	/**
+	 * Строка, содержащаяся в теле сообщения
+	 */
+	public String getContent() {
         return this.content;
     }
 }

@@ -11,7 +11,7 @@ import java.net.Socket;
  * Слушатель клиента на серверной стороне
  */
 public class ClientHandler implements Runnable {
-	private String login = "guest";
+	private String login = null;
     private Socket socket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
@@ -21,8 +21,13 @@ public class ClientHandler implements Runnable {
     	this.server = server;
         this.socket = socket;
         this.output = new ObjectOutputStream(socket.getOutputStream());
+	    this.output.flush();
         this.input = new ObjectInputStream(socket.getInputStream());
     }
+	
+	public String getLogin() {
+		return login;
+	}
 	
 	/**
 	 * Отправить сообщение в чат
@@ -40,6 +45,7 @@ public class ClientHandler implements Runnable {
 	public void sendCustomMessage(Message message) {
 		try {
 			output.writeObject(message);
+			output.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -55,14 +61,17 @@ public class ClientHandler implements Runnable {
 			    		"Пользователь %s подключился к чату",
 					    login
 			    ));
+			    server.userConnected(this, login);
 		    } else {
-		    	throw new IllegalMessageException("Первое сообщение клиента должно быть логином!");
+		    	throw new IllegalMessageException("Первое сообщение клиента должно быть логином! " + message);
 		    }
 	    } catch (IOException e) {
 	    	tryClose();
+	    	e.printStackTrace();
 	    	return;
 	    } catch (ClassNotFoundException e) {
 		    tryClose();
+		    e.printStackTrace();
 		    return;
 	    } catch (IllegalMessageException e) {
 		    e.printStackTrace();
@@ -93,6 +102,9 @@ public class ClientHandler implements Runnable {
 	 * Попытаться закрыть стримы и сокет после ошибки
 	 */
 	private void tryClose() {
+		if (login != null) {
+			server.userDisconnected(login);
+		}
 		try {
 			input.close();
 		} catch (Exception e) {}

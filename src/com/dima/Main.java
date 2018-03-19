@@ -1,6 +1,9 @@
 package com.dima;
 
 public class Main {
+	/**
+	 * Порт, на котором будет работать сервер и клиенты
+	 */
     public static final int PORT = 5482;
 
     public static void main(String[] args) {
